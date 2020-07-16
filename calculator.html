@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+    <meta charset="utf-8">
+    <title></title>
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+  </head>
+  <body>
+    <table>
+    <tr>
+      <td colspan="8" style="text-align:center; color: white"  class="card-panel black" >Vendor Payment Calculator</td>
+    </tr>
+    <tr>
+      <td colspan="8" style="text-align:center; color: white"  class="card-panel blue">GIVEN DATA</td>
+    </tr>
+    <tr></tr>
+    <tr>
+      <td style="text-align:right">Vendor Name: </td>
+      <td style="text-align:left; color:red">Company A</td>
+      <td></td>
+      <td></td>
+      <td style="text-align:right; color:green">Total Material Cost: </td>
+      <td id="tMatCost" style="text-align:right; color:red">37180.80</td>
+      <td style="text-align:left; color:blue" id = "changeVatInc1">(VATInc)</td>
+    </tr>
+    <tr>
+      <td style="text-align:right">Vendor VAT Status: </td>
+      <td style="text-align:left; color:blue" id="changeStatus">VAT Registered</td>
+      <td></td>
+      <td></td>
+      <td style="text-align:right; color:green">Total Labor Cost: </td>
+      <td id="tLabCost" style="text-align:right; color:red">8000.00</td>
+      <td style="text-align:left; color:blue" id="changeVatInc2">(VATInc)</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td style="text-align:right">Total Cost: </td>
+      <td id="tCost" style="text-align:right; color:red">P45180.80</td>
+      <td style="text-align:left; color:blue" id="changeVatInc3">(VATInc)</td>
+    </tr>
+    </table>
+
+  <table class="striped">
+  <tr>
+    <td colspan="3" style="text-align:center; color:white"  class="card-panel blue">Controls</td>
+    <td>      </td>
+    <td colspan="4" style="text-align:center; color:white" class="card-panel blue">Computation</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right"> Vendor VAT Status</td>
+    <td> <select id="status" class="browser-default btn purple">
+      <option value="vat" onclick="compute()">VAT</option>
+      <option value="nonVat" onclick="compute()">Non-VAT</option>
+    </select></td>
+    <td></td>
+    <td></td>
+    <td>Material Cost</td>
+    <td>Labor cost</td>
+    <td>Total Cost</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right"> Quoted Price VAT Status</td>
+    <td> <select id="qpStatus" class="browser-default btn purple">
+      <option value="vatInc" onclick="compute()">VATInc</option>
+      <option value="vatEx" onclick="compute()">VATEx</option>
+    </select></td>
+    <td></td>
+    <td style="text-align:right">Total Cost (VATInc)</td>
+    <td id="tMatCostComp" style="text-align:right; color:blue">-</td>
+    <td id="tLabCostComp" style="text-align:right; color:blue">-</td>
+    <td id="tCostComp" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right"> EWT Rate</td>
+    <td> <input id="ewt" type="number" onclick="compute()"></td>
+    <td></td>
+    <td style="text-align:right">Less: Order Discount Appliend on VATInc</td>
+    <td id="orderDiscountVatIncMat" style="text-align:right; color:blue">-</td>
+    <td id="orderDiscountVatIncLab" style="text-align:right; color:blue">-</td>
+    <td id="orderDiscountVatIncTot" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right">Less: VAT</td>
+    <td id="lessVatMat" style="text-align:right; color:blue">-</td>
+    <td id= "lessVatLab" style="text-align:right; color:blue">-</td>
+    <td id="lessVatTot" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right">Order Discount</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right"> Discount applied on</td>
+    <td><select id="vatPrize" class="browser-default btn purple">
+      <option value="vatIncPrize" onclick="compute()">VATInc Prize</option>
+      <option value="vatExPrize" onclick="compute()">VATEx Prize</option>
+    </select></td>
+    <td></td>
+    <td style="text-align:right">Total Amount (VATEx)</td>
+    <td id="tMatCostEx" style="text-align:right; color:blue">-</td>
+    <td id="tLabCostEx" style="text-align:right; color:blue">-</td>
+    <td id="tCostEx" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right">Less: Order Discount Applied on VATEx</td>
+    <td id="discMatEx" style="text-align:right; color:blue">-</td>
+    <td id="discLabEx" style="text-align:right; color:blue">-</td>
+    <td id="discTotEx" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right">% of Cost discount</td>
+    <td> <input id="discount" type="number" onclick="compute()"></td>
+    <td></td>
+    <td style="text-align:right">Discounted Total cost (VATEx)</td>
+    <td id="totalDiscountMatVatEx" style="text-align:right; color:blue">-</td>
+    <td id="totalDiscountLabVatEx" style="text-align:right; color:blue">-</td>
+    <td id="totalDiscountVatEx" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right">discounted on</td>
+    <td><select id="discount1" class="browser-default btn purple">
+      <option value="total" onclick="compute()">Total Cost</option>
+      <option value="material" onclick="compute()">Material Cost</option>
+      <option value="labor" onclick="compute()">L&E Cost</option>
+    </select></td>
+    <td></td>
+    <td style="text-align:right">Add: VAT</td>
+    <td id="addVatMat" style="text-align:right; color:blue">-</td>
+    <td id="addVatLab" style="text-align:right; color:blue">-</td>
+    <td id="addVatTot" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td style="text-align:right">Less: EWT</td>
+    <td class="card-panel grey"></td>
+    <td id="ewtLab" style="text-align:right; color:blue">-</td>
+    <td id="ewtTot" style="text-align:right; color:blue">-</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right">Fixed Amount</td>
+    <td> <input id="fixedAmount" type="number" onclick="compute()"></td>
+    <td></td>
+    <td style="text-align:right">Add: Shipment / Delivery Cost</td>
+    <td class="card-panel grey"></td>
+    <td class="card-panel grey"></td>
+    <td id="shipment" style="text-align:right; color:blue">1200</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:right">discounted on</td>
+    <td><select id="discount2" class="browser-default btn purple">
+      <option value="material" onclick="compute()">Material Cost</option>
+      <option value="labor" onclick="compute()">L&E Cost</option>
+    </select></td>
+    <td></td>
+    <td style="text-align:right">NET TOTAL AMOUNT PAYABLE</td>
+    <td class="card-panel grey"></td>
+    <td class="card-panel grey"></td>
+    <td id="totalCost" style="text-align:right; color:blue">-</td>
+  </tr>
+  </table>
+
+  <script src="calculator.js" charset="utf-8"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  </body>
+</html>
